@@ -6,64 +6,51 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "canales_email")
-public class CanalEmail extends CanalNotificacion {
+@Table(name = "canales_sms")
+public class CanalSms extends CanalNotificacion {
 
-    @Column(name = "servidor_smtp", nullable = false)
-    private String servidorSmtp;
+    @Column(name = "proveedor_sms", nullable = false)
+    private String proveedorSms;
 
-    @Column(nullable = false)
-    private String remitente;
+    @Column(name = "numero_origen", nullable = false)
+    private String numeroOrigen;
 
-    @Column(nullable = false)
-    private String asunto;
-
-    public CanalEmail() {
+    public CanalSms() {
     }
 
-    public CanalEmail(String servidorSmtp, String remitente, String asunto) {
-        this.servidorSmtp = servidorSmtp;
-        this.remitente = remitente;
-        this.asunto = asunto;
+    public CanalSms(String proveedorSms, String numeroOrigen) {
+        this.proveedorSms = proveedorSms;
+        this.numeroOrigen = numeroOrigen;
     }
 
-    public String getServidorSmtp() {
-        return servidorSmtp;
+    public String getProveedorSms() {
+        return proveedorSms;
     }
 
-    public void setServidorSmtp(String servidorSmtp) {
-        this.servidorSmtp = servidorSmtp;
+    public void setProveedorSms(String proveedorSms) {
+        this.proveedorSms = proveedorSms;
     }
 
-    public String getRemitente() {
-        return remitente;
+    public String getNumeroOrigen() {
+        return numeroOrigen;
     }
 
-    public void setRemitente(String remitente) {
-        this.remitente = remitente;
-    }
-
-    public String getAsunto() {
-        return asunto;
-    }
-
-    public void setAsunto(String asunto) {
-        this.asunto = asunto;
+    public void setNumeroOrigen(String numeroOrigen) {
+        this.numeroOrigen = numeroOrigen;
     }
 
     @Override
     public void enviar(Notificacion notificacion) {
-        String emailDestino = notificacion.getDestinatario().getEmail();
+        String telefonoDestino = notificacion.getDestinatario().getTelefono();
 
-        if (emailDestino == null || emailDestino.isBlank()) {
-            throw new BusinessException("El usuario no tiene correo electrónico registrado.");
+        if (telefonoDestino == null || telefonoDestino.isBlank()) {
+            throw new BusinessException("El usuario no tiene número telefónico registrado.");
         }
 
-        System.out.println("=== ENVIO EMAIL ===");
-        System.out.println("SMTP: " + servidorSmtp);
-        System.out.println("Remitente: " + remitente);
-        System.out.println("Asunto: " + asunto);
-        System.out.println("Destino: " + emailDestino);
+        System.out.println("=== ENVIO SMS ===");
+        System.out.println("Proveedor: " + proveedorSms);
+        System.out.println("Número origen: " + numeroOrigen);
+        System.out.println("Destino: " + telefonoDestino);
         System.out.println("Mensaje: " + notificacion.getMensaje());
     }
 }
